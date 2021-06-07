@@ -13,10 +13,9 @@ getRandomInteger(1, 3);
 function getRandomFloat(min, max, fraction) {
   const rand = min + Math.random() * (max - min);
   if( max <= min ) {
-    throw new Error('getRandomInteger — максимальное число меньше или равно минимальному');
+    throw new Error('getRandomFloat — максимальное число меньше или равно минимальному');
   }
   return parseFloat(rand).toFixed(fraction);
 }
 
 getRandomFloat(1.1, 2.3, 2);
-
