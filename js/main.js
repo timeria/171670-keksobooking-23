@@ -49,6 +49,17 @@ const PRICE = {
   min: 0,
   max: 100000,
 };
+
+const ROOMS = {
+  min: 0,
+  max: 10,
+};
+
+const GUESTS = {
+  min: 0,
+  max: 100,
+};
+
 // Результат: целое число из диапазона "от...до"
 const getRandomInteger = (min, max) => {
   const rand = min + Math.random() * (max + 1 - min);
@@ -74,26 +85,29 @@ const getLocation =  () => ({
   lng: getRandomFloat(LONGITUDE.min, LONGITUDE.max, 5),
 });
 
-const CURRENT_LOCATION = getLocation();
-
-const generateOffer = () => ({
-  author: {
-    vatar: 'img/avatars/user0' + getRandomInteger(1, 8) + '.png',
-  },
-  offer: {
-    title: 'Заголовок',
-    address: CURRENT_LOCATION,
-    price: getRandomInteger(PRICE.min, PRICE.max),
-    type: getRandomArrayElement(TYPE_HOUSES),
-    rooms: getRandomInteger(0, 10),
-    guests: getRandomInteger(0, 100),
-    checkin: getRandomArrayElement(CHECKIN),
-    checkout: getRandomArrayElement(CHECKOUT),
-    features: FEATURES.slice(getRandomInteger(0, 2), getRandomInteger(3, 6)),
-    description: 'Новое описание',
-    photos: getRandomArrayElement(PHOTOS),
-  },
-  location: CURRENT_LOCATION,
-});
+const generateOffer = () => {
+  const CURRENT_LOCATION = getLocation();
+  return {
+    author: {
+      avatar: `img/avatars/user0${getRandomInteger(1, 8)}.png`,
+    },
+    offer: {
+      title: 'Заголовок',
+      address: `${CURRENT_LOCATION.lat}, ${CURRENT_LOCATION.lng}`,
+      price: getRandomInteger(PRICE.min, PRICE.max),
+      type: getRandomArrayElement(TYPE_HOUSES),
+      rooms: getRandomInteger(ROOMS.min, ROOMS.max),
+      guests: getRandomInteger(GUESTS.min, GUESTS.max),
+      checkin: getRandomArrayElement(CHECKIN),
+      checkout: getRandomArrayElement(CHECKOUT),
+      features: FEATURES.slice(getRandomInteger(0, 2), getRandomInteger(3, 6)),
+      description: 'Новое описание',
+      photos: PHOTOS.slice(getRandomInteger(0, 1), getRandomInteger(1, 2)),
+    },
+    location: CURRENT_LOCATION,
+  };
+};
 
 const listOffer = new Array(OFFERS_COUNT).fill(null).map(generateOffer);
+
+listOffer;
