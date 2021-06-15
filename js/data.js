@@ -1,7 +1,4 @@
-import {getLocation} from './util.js';
-import {getRandomInteger} from './util.js';
-import {getRandomFloat} from './util.js';
-import {getRandomArrayElement} from './util.js';
+import { getLocation, getRandomInteger, getRandomArrayElement } from './util.js';
 
 const OFFERS_COUNT = 10;
 
@@ -55,28 +52,38 @@ const GUESTS = {
   max: 100,
 };
 
-const generateOffer = () => {
-    const CURRENT_LOCATION = getLocation();
-    return {
-      author: {
-        avatar: `img/avatars/user0${getRandomInteger(1, 8)}.png`,
-      },
-      offer: {
-        title: 'Заголовок',
-        address: `${CURRENT_LOCATION.lat}, ${CURRENT_LOCATION.lng}`,
-        price: getRandomInteger(PRICE.min, PRICE.max),
-        type: getRandomArrayElement(TYPE_HOUSES),
-        rooms: getRandomInteger(ROOMS.min, ROOMS.max),
-        guests: getRandomInteger(GUESTS.min, GUESTS.max),
-        checkin: getRandomArrayElement(CHECKIN),
-        checkout: getRandomArrayElement(CHECKOUT),
-        features: FEATURES.slice(getRandomInteger(0, 2), getRandomInteger(3, 6)),
-        description: 'Новое описание',
-        photos: PHOTOS.slice(getRandomInteger(0, 1), getRandomInteger(1, 2)),
-      },
-      location: CURRENT_LOCATION,
-    };
-  };
+const LATITUDE = {
+  min: 35.65000,
+  max: 35.70000,
+};
 
-  export {generateOffer};
-  export {OFFERS_COUNT};
+const LONGITUDE = {
+  min: 139.70000,
+  max: 139.80000,
+};
+
+const generateOffer = () => {
+  const CURRENT_LOCATION = getLocation(LATITUDE, LONGITUDE);
+  return {
+    author: {
+      avatar: `img/avatars/user0${getRandomInteger(1, 8)}.png`,
+    },
+    offer: {
+      title: 'Заголовок',
+      address: `${CURRENT_LOCATION.lat}, ${CURRENT_LOCATION.lng}`,
+      price: getRandomInteger(PRICE.min, PRICE.max),
+      type: getRandomArrayElement(TYPE_HOUSES),
+      rooms: getRandomInteger(ROOMS.min, ROOMS.max),
+      guests: getRandomInteger(GUESTS.min, GUESTS.max),
+      checkin: getRandomArrayElement(CHECKIN),
+      checkout: getRandomArrayElement(CHECKOUT),
+      features: FEATURES.slice(getRandomInteger(0, 2), getRandomInteger(3, 6)),
+      description: 'Новое описание',
+      photos: PHOTOS.slice(getRandomInteger(0, 1), getRandomInteger(1, 2)),
+    },
+    location: CURRENT_LOCATION,
+  };
+};
+
+export {generateOffer};
+export {OFFERS_COUNT};
