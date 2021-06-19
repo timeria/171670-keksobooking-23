@@ -62,11 +62,25 @@ const LONGITUDE = {
   max: 139.80000,
 };
 
+const offerType = (type) => {
+  if(type === 'flat') {
+    return 'Квартира';
+  }else if(type === 'bungalow'){
+    return 'Бунгало';
+  }else if(type === 'house'){
+    return 'Дом';
+  }else if(type === 'palace'){
+    return 'Дворец';
+  }else if(type === 'hotel'){
+    return 'Отель';
+  }
+};
+
 const generateOffer = () => {
   const CURRENT_LOCATION = getLocation(LATITUDE, LONGITUDE);
   return {
     author: {
-      avatar: `img/avatars/user0${getRandomInteger(1, 8)}.png`,
+      avatar: getRandomInteger(1, 8),
     },
     offer: {
       title: 'Заголовок',
@@ -85,5 +99,5 @@ const generateOffer = () => {
   };
 };
 
-export {generateOffer};
+export {generateOffer, offerType};
 export {OFFERS_COUNT};

@@ -23,4 +23,40 @@ const getLocation =  (lat, lng) => ({
   lng: getRandomFloat(lng.min, lng.max, 5),
 });
 
-export {getRandomInteger, getRandomArrayElement, getLocation};
+const typeFeatures = ((items, container) => {
+  if (items) {
+    container.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+
+    items.forEach((item) => {
+      const element = document.createElement('li');
+      element.className = `popup__feature popup__feature--${item}`;
+      fragment.appendChild(element);
+    });
+
+    container.appendChild(fragment);
+  } else {
+    container.classList.add('hidden');
+  }
+
+});
+
+const renderPhotos = ((items, container) => {
+  if (items) {
+    const photoItem = container.querySelector('.popup__photo');
+    container.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+
+    items.forEach((item) => {
+      const photo = photoItem.cloneNode(true);
+      photo.src = item;
+      fragment.appendChild(photo);
+    });
+
+    container.appendChild(fragment);
+  } else {
+    container.classList.add('hidden');
+  }
+});
+
+export {getRandomInteger, getRandomArrayElement, getLocation, typeFeatures, renderPhotos};
