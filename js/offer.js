@@ -1,46 +1,81 @@
-import {offerType} from './data.js';
-import {typeFeatures, renderPhotos} from './util.js';
+import {TYPES_OF_HOUSING} from './data.js';
 
-const mapCanvas = document.querySelector('#map-canvas');
+const mapCard = document.querySelector('#card');
 
-const mapCanvasCard = document.querySelector('#card').content;
+const addFeatures = (items, container) => {
+  if (items) {
+    container.innerHTML = '';
+    const fragment = document.createDocumentFragment();
 
-const mapCanvasTemplate = mapCanvasCard.querySelector('.popup');
+    items.forEach((item) => {
+      const element = document.createElement('li');
+      element.className = `popup__feature popup__feature--${item}`;
+      fragment.appendChild(element);
+    });
 
-const renderCards = (element) => {
-  element.forEach(({author, offer}) => {
-    const mapCanvasElement = mapCanvasTemplate.cloneNode(true);
+    container.appendChild(fragment);
+  } else {
+    container.classList.add('hidden');
+  }
 
-    const popupFeatures = mapCanvasElement.querySelector('.popup__features');
-
-    const popupPhotos = mapCanvasElement.querySelector('.popup__photos');
-
-    mapCanvasElement.querySelector('.popup__title').textContent = offer.title;
-
-    mapCanvasElement.querySelector('.popup__text--address').textContent = offer.address;
-
-    mapCanvasElement.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-
-    mapCanvasElement.querySelector('.popup__type').textContent = `${offerType(offer.type)}`;
-
-    mapCanvasElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
-
-    mapCanvasElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-
-    typeFeatures(offer.features, popupFeatures);
-
-    if (offer.description !== 0) {
-      mapCanvasElement.querySelector('.popup__description').textContent  = offer.description;
-    } else {
-      mapCanvasElement.querySelector('.popup__description').classList.add('hidden');
-    }
-
-    renderPhotos(offer.photos, popupPhotos);
-
-    mapCanvasElement.querySelector('.popup__avatar').setAttribute('src', `img/avatars/user0${author.avatar}.png`);
-
-    mapCanvas.appendChild(mapCanvasElement);
-  });
 };
 
-export {renderCards};
+const addPhotos = (items, container) => {
+  if (items) {
+    const photoItem = container.querySelector('.popup__photo');
+    container.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+
+    items.forEach((item) => {
+      const photo = photoItem.cloneNode(true);
+      photo.src = item;
+      fragment.appendChild(photo);
+    });
+
+    container.appendChild(fragment);
+  } else {
+    container.classList.add('hidden');
+  }
+};
+
+const generateAds = (ads) => {
+
+  const adsFragment = document.createDocumentFragment();
+
+  ads.forEach(({author, offer}) => {
+
+    const offerClone = mapCard.content.querySelector('.popup').cloneNode(true);
+
+    offerClone.querySelector('.popup__title').textContent = offer.title;
+
+    offerClone.querySelector('.popup__text--address').textContent = offer.address;
+
+    offerClone.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
+
+    offerClone.querySelector('.popup__type').textContent = TYPES_OF_HOUSING[offer.type];
+
+    offerClone.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
+
+    offerClone.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+
+    addFeatures(offer.features, offerClone.querySelector('.popup__features'));
+
+    if (offer.description) {
+      offerClone.querySelector('.popup__description').textContent  = offer.description;
+    } else {
+      offerClone.querySelector('.popup__description').classList.add('hidden');
+    }
+
+    addPhotos(offer.photos, offerClone.querySelector('.popup__photos'));
+
+    offerClone.querySelector('.popup__avatar').src = author.avatar;
+
+    adsFragment.appendChild(offerClone);
+
+  });
+
+  return adsFragment;
+
+};
+
+export {generateAds};

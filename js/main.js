@@ -1,7 +1,10 @@
-import {OFFERS_COUNT} from './data.js';
-import {generateOffer} from './data.js';
-import {renderCards} from './offer.js';
+import {OFFERS_COUNT, generateOffer} from './data.js';
+import {generateAds} from './offer.js';
 
-const listOffer = new Array(OFFERS_COUNT).fill(null).map(generateOffer);
+const mapCanvas = document.querySelector('#map-canvas');
 
-renderCards(listOffer);
+const offersList = new Array(OFFERS_COUNT).fill(null).map(generateOffer);
+
+const allOffersFragment = generateAds(offersList); // тут фрагмент с разметкой 10 карточек
+
+mapCanvas.appendChild(allOffersFragment.firstChild);
