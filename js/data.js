@@ -10,6 +10,14 @@ const TYPE_HOUSES = [
   'hotel',
 ];
 
+const TYPES_OF_HOUSING = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель',
+};
+
 const CHECKOUT = [
   '12:00',
   '13:00',
@@ -85,5 +93,4 @@ const generateOffer = () => {
   };
 };
 
-export {generateOffer};
-export {OFFERS_COUNT};
+export {TYPES_OF_HOUSING, OFFERS_COUNT, generateOffer};
