@@ -11,11 +11,26 @@ const TYPE_HOUSES = [
 ];
 
 const TYPES_OF_HOUSING = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-  hotel: 'Отель',
+  palace: {
+    name: 'Дворец',
+    minPrice: 10000,
+  },
+  flat: {
+    name: 'Комната',
+    minPrice: 1000,
+  },
+  house: {
+    name: 'Дом',
+    minPrice: 5000,
+  },
+  bungalow: {
+    name: 'Бунгало',
+    minPrice: 0,
+  },
+  hotel: {
+    name: 'Отель',
+    minPrice: 3000,
+  },
 };
 
 const CHECKOUT = [
@@ -93,4 +108,4 @@ const generateOffer = () => {
   };
 };
 
-export {TYPES_OF_HOUSING, OFFERS_COUNT, generateOffer};
+export {OFFERS_COUNT, generateOffer, TYPES_OF_HOUSING};
