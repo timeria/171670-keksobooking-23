@@ -52,7 +52,7 @@ const generateAds = (ads) => {
 
     offerClone.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
 
-    offerClone.querySelector('.popup__type').textContent = TYPES_OF_HOUSING[offer.type];
+    offerClone.querySelector('.popup__type').textContent = TYPES_OF_HOUSING[offer.type].name;
 
     offerClone.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
 

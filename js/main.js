@@ -1,6 +1,6 @@
 import {OFFERS_COUNT, generateOffer} from './data.js';
 import {generateAds} from './offer.js';
-import {addMinPrice, validateRoomsAndGuests, typeHousesSelect, roomNumberSelect, capacitySelect} from './form.js';
+import {validateMinPrice, validateRoomsInput, addForm} from './form.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
 
@@ -10,14 +10,8 @@ const allOffersFragment = generateAds(offersList); // тут фрагмент с
 
 mapCanvas.appendChild(allOffersFragment.firstChild);
 
-typeHousesSelect.addEventListener('change', () => {
-  addMinPrice();
-});
+addForm.type.addEventListener('change', validateMinPrice);
 
-roomNumberSelect.addEventListener('change', () => {
-  validateRoomsAndGuests();
-});
+addForm.rooms.addEventListener('change', validateRoomsInput);
 
-capacitySelect.addEventListener('change', () => {
-  validateRoomsAndGuests();
-});
+//togglePageActiveState(true);
