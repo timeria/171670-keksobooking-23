@@ -2,6 +2,9 @@ import {TYPES_OF_HOUSING} from './data.js';
 
 const addForm = document.querySelector('.ad-form');
 const filterForm = document.querySelector('.map__filters');
+const formSuccess = document.querySelector('#success').content.querySelector('.success');
+const formError = document.querySelector('#error').content.querySelector('.error');
+
 const ROOMS_FOR_GUESTS_MAP = {
   1: ['1'],
   2: ['1', '2'],
@@ -40,4 +43,39 @@ const togglePageActiveState = (isDisabled) => {
   });
 };
 
-export {togglePageActiveState, validateMinPrice, validateRoomsInput, addForm, roomNumberSelect, capacitySelect};
+const onTimeChange = (sourceElement, targetElement) => {
+  if (sourceElement.value !== targetElement.value) {
+    targetElement.value = sourceElement.value;
+  }
+};
+
+const setUserFormSubmit = (onSuccess, onError) => {
+  addForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    fetch('https://23.javascript.pages.academy/keksobooking/data',
+      {
+        method: 'POST',
+        body: new FormData(evt.target),
+      },
+    ).then((response) => {
+      if(response.ok) {
+        onSuccess();
+      } else {
+        onError();
+      }
+    })
+      .catch(() => {
+        onError();
+      });
+  });
+};
+
+const addSuccess = () => {
+  formSuccess.insertAdjacentHTML('beforeEnd', '<body></body>');
+};
+const addError = () => {
+  formError.insertAdjacentHTML('beforeEnd', '<body></body>');
+};
+
+export {togglePageActiveState, validateMinPrice, validateRoomsInput, addForm, roomNumberSelect, capacitySelect, onTimeChange, addSuccess, addError, setUserFormSubmit};

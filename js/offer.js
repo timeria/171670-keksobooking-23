@@ -38,44 +38,37 @@ const addPhotos = (items, container) => {
   }
 };
 
-const generateAds = (ads) => {
+const generateAd = ({offer, author}) => {
 
-  const adsFragment = document.createDocumentFragment();
+  const offerClone = mapCard.content.querySelector('.popup').cloneNode(true);
 
-  ads.forEach(({author, offer}) => {
+  offerClone.querySelector('.popup__title').textContent = offer.title;
 
-    const offerClone = mapCard.content.querySelector('.popup').cloneNode(true);
+  offerClone.querySelector('.popup__text--address').textContent = offer.address;
 
-    offerClone.querySelector('.popup__title').textContent = offer.title;
+  offerClone.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
 
-    offerClone.querySelector('.popup__text--address').textContent = offer.address;
+  offerClone.querySelector('.popup__type').textContent = TYPES_OF_HOUSING[offer.type].name;
 
-    offerClone.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
+  offerClone.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
 
-    offerClone.querySelector('.popup__type').textContent = TYPES_OF_HOUSING[offer.type].name;
+  offerClone.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
 
-    offerClone.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
+  addFeatures(offer.features, offerClone.querySelector('.popup__features'));
 
-    offerClone.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  if (offer.description) {
+    offerClone.querySelector('.popup__description').textContent  = offer.description;
+  } else {
+    offerClone.querySelector('.popup__description').classList.add('hidden');
+  }
 
-    addFeatures(offer.features, offerClone.querySelector('.popup__features'));
+  addPhotos(offer.photos, offerClone.querySelector('.popup__photos'));
 
-    if (offer.description) {
-      offerClone.querySelector('.popup__description').textContent  = offer.description;
-    } else {
-      offerClone.querySelector('.popup__description').classList.add('hidden');
-    }
+  offerClone.querySelector('.popup__avatar').src = author.avatar;
 
-    addPhotos(offer.photos, offerClone.querySelector('.popup__photos'));
 
-    offerClone.querySelector('.popup__avatar').src = author.avatar;
-
-    adsFragment.appendChild(offerClone);
-
-  });
-
-  return adsFragment;
+  return offerClone;
 
 };
 
-export {generateAds};
+export {generateAd};

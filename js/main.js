@@ -1,17 +1,11 @@
-import {OFFERS_COUNT, generateOffer} from './data.js';
-import {generateAds} from './offer.js';
-import {validateMinPrice, validateRoomsInput, addForm} from './form.js';
-
-const mapCanvas = document.querySelector('#map-canvas');
-
-const offersList = new Array(OFFERS_COUNT).fill(null).map(generateOffer);
-
-const allOffersFragment = generateAds(offersList); // тут фрагмент с разметкой 10 карточек
-
-mapCanvas.appendChild(allOffersFragment.firstChild);
+import {validateMinPrice, validateRoomsInput, addForm, onTimeChange, setUserFormSubmit, addSuccess, addError} from './form.js';
+import './map.js';
 
 addForm.type.addEventListener('change', validateMinPrice);
 
 addForm.rooms.addEventListener('change', validateRoomsInput);
 
-//togglePageActiveState(true);
+addForm.timein.addEventListener('change', onTimeChange.bind(null, addForm.timein, addForm.timeout));
+addForm.timeout.addEventListener('change', onTimeChange.bind(null, addForm.timeout, addForm.timein));
+
+setUserFormSubmit(addSuccess, addError);
