@@ -85,6 +85,29 @@ const LONGITUDE = {
   max: 139.80000,
 };
 
+const TOKIO_CENTER = {
+  lat: 35.68656,
+  lng: 139.74842,
+};
+
+const pinSetting = {
+  MAIN: {
+    iconUrl: '../img/main-pin.svg',
+    iconSize: [52, 52],
+    iconAnchor: [26, 52],
+  },
+  REGULAR: {
+    iconUrl: '../img/pin.svg',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+  }
+};
+
+const fetchUrl = {
+  GET: 'https://23.javascript.pages.academy/keksobooking/data',
+  POST: 'https://23.javascript.pages.academy/keksobooking',
+};
+
 const generateOffer = () => {
   const CURRENT_LOCATION = getLocation(LATITUDE, LONGITUDE);
   return {
@@ -108,4 +131,4 @@ const generateOffer = () => {
   };
 };
 
-export {OFFERS_COUNT, generateOffer, TYPES_OF_HOUSING};
+export {OFFERS_COUNT, TYPES_OF_HOUSING, TOKIO_CENTER, pinSetting, fetchUrl};

@@ -1,4 +1,4 @@
-import {TYPES_OF_HOUSING} from './data.js';
+import {TYPES_OF_HOUSING, fetchUrl} from './data.js';
 
 const addForm = document.querySelector('.ad-form');
 const filterForm = document.querySelector('.map__filters');
@@ -33,7 +33,7 @@ const validateRoomsInput = (evt) => {
   }
   addForm.capacity.value = capacityElement[0];
 };
-
+//Активация, деактивация формы
 const togglePageActiveState = (isDisabled) => {
   addForm.classList.toggle('ad-form--disabled', isDisabled);
   [addForm, filterForm].forEach((form) => {
@@ -42,7 +42,7 @@ const togglePageActiveState = (isDisabled) => {
     }
   });
 };
-
+//Время заезда, выезда
 const onTimeChange = (sourceElement, targetElement) => {
   if (sourceElement.value !== targetElement.value) {
     targetElement.value = sourceElement.value;
@@ -53,7 +53,7 @@ const setUserFormSubmit = (onSuccess, onError) => {
   addForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    fetch('https://23.javascript.pages.academy/keksobooking/data',
+    fetch(fetchUrl.POST,
       {
         method: 'POST',
         body: new FormData(evt.target),
@@ -71,11 +71,24 @@ const setUserFormSubmit = (onSuccess, onError) => {
   });
 };
 
-const addSuccess = () => {
-  formSuccess.insertAdjacentHTML('beforeEnd', '<body></body>');
+const addSuccessPopup = () => {
+  document.body.append(formSuccess);
 };
-const addError = () => {
-  formError.insertAdjacentHTML('beforeEnd', '<body></body>');
+const addErrorPopup = () => {
+  document.body.append(formError);
 };
 
-export {togglePageActiveState, validateMinPrice, validateRoomsInput, addForm, roomNumberSelect, capacitySelect, onTimeChange, addSuccess, addError, setUserFormSubmit};
+const closePopup =() => {
+  document.addEventListener('click', () => {
+    formSuccess.remove();
+    formError.remove();
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.keyCode === 27) {
+      formSuccess.remove();
+      formError.remove();
+    };
+  });
+}
+
+export {togglePageActiveState, validateMinPrice, validateRoomsInput, addForm, roomNumberSelect, capacitySelect, onTimeChange, addSuccessPopup, addErrorPopup, setUserFormSubmit, closePopup, filterForm};

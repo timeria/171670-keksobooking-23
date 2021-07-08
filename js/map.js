@@ -1,6 +1,9 @@
-import {addForm, togglePageActiveState} from './form.js';
-import {OFFERS_COUNT} from './data.js';
+import {addForm, filterForm, togglePageActiveState} from './form.js';
+import {OFFERS_COUNT, TOKIO_CENTER, pinSetting, fetchUrl} from './data.js';
 import {generateAd} from './offer.js';
+
+const mainPinIcon = L.icon(pinSetting.MAIN);
+const resetButton = addForm.querySelector('.ad-form__reset');
 
 togglePageActiveState(true);
 
@@ -8,10 +11,7 @@ const map = L.map('map-canvas')
   .on('load', () => {
     togglePageActiveState(false);
   })
-  .setView({
-    lat: 35.686569,
-    lng: 139.748427,
-  }, 13);
+  .setView(TOKIO_CENTER, 13);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -20,17 +20,8 @@ L.tileLayer(
   },
 ).addTo(map);
 
-const mainPinIcon = L.icon({
-  iconUrl: '../img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
-});
-
 const markerMain = L.marker(
-  {
-    lat: 35.686569,
-    lng: 139.748427,
-  },
+  TOKIO_CENTER,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -39,29 +30,31 @@ const markerMain = L.marker(
 
 markerMain.addTo(map);
 
-markerMain.on('moveend', (evt) => {
-  addForm.address.value = evt.target.getLatLng();
+resetButton.addEventListener('click', () => {
+  markerMain.setLatLng(TOKIO_CENTER);
+  map.setView(TOKIO_CENTER, 13);
+  [addForm, filterForm].forEach((form) => {
+    for (const element of form.elements) {
+      element.value = '';
+    }
+  });
+});
+
+markerMain.on('move', (evt) => {
+  addForm.address.value = evt.target.getLatLng().toString().replace(/[^\d. ,-]/g, '');
 });
 
 
-fetch('https://23.javascript.pages.academy/keksobooking/data')
+fetch(fetchUrl.GET)
   .then((response) => response.json())
   .then((offers) => {
     offers.slice(0, OFFERS_COUNT).forEach((offer) => {
-      const {lat, lng} = offer.location;
-      const icon = L.icon({
-        iconUrl: '../img/pin.svg',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-      });
+      const regularPinIcon = L.icon(pinSetting.REGULAR);
 
       const marker = L.marker(
+          offer.location,
         {
-          lat,
-          lng,
-        },
-        {
-          icon,
+          regularPinIcon,
         },
       );
       marker.addTo(map)
