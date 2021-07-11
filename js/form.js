@@ -1,9 +1,11 @@
-import {TYPES_OF_HOUSING, fetchUrl} from './data.js';
+import {TYPES_OF_HOUSING, fetchUrl, TOKIO_CENTER} from './data.js';
 
 const addForm = document.querySelector('.ad-form');
 const filterForm = document.querySelector('.map__filters');
-const formSuccess = document.querySelector('#success').content.querySelector('.success');
-const formError = document.querySelector('#error').content.querySelector('.error');
+const formSuccessPopup = document.querySelector('#success').content.querySelector('.success');
+const formErrorPopup = document.querySelector('#error').content.querySelector('.error');
+const loadErrorPopup = document.querySelector('#noload').content.querySelector('.noload');
+const resetButton = addForm.querySelector('.ad-form__reset');
 
 const ROOMS_FOR_GUESTS_MAP = {
   1: ['1'],
@@ -43,52 +45,58 @@ const togglePageActiveState = (isDisabled) => {
   });
 };
 //Время заезда, выезда
-const onTimeChange = (sourceElement, targetElement) => {
-  if (sourceElement.value !== targetElement.value) {
-    targetElement.value = sourceElement.value;
+const onTimeChange = function (evt) {
+  if (evt.target === addForm.timein) {
+    addForm.timeout.value = addForm.timein.value;
+  } else {
+    addForm.timein.value = addForm.timeout.value;
   }
 };
 
-const setUserFormSubmit = (onSuccess, onError) => {
-  addForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    fetch(fetchUrl.POST,
-      {
-        method: 'POST',
-        body: new FormData(evt.target),
-      },
-    ).then((response) => {
-      if(response.ok) {
-        onSuccess();
-      } else {
-        onError();
-      }
-    })
-      .catch(() => {
-        onError();
-      });
-  });
-};
-
 const addSuccessPopup = () => {
-  document.body.append(formSuccess);
+  document.body.append(formSuccessPopup);
 };
+
 const addErrorPopup = () => {
-  document.body.append(formError);
+  document.body.append(formErrorPopup);
+};
+
+const resetForm = () => {
+  markerMain.setLatLng(TOKIO_CENTER);
+  map.setView(TOKIO_CENTER, 13);
+  addForm.reset();
+  filterForm.reset();
+};
+
+addForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  fetch(fetchUrl.POST,
+    {
+      method: 'POST',
+      body: new FormData(evt.target),
+    },
+  ).then((response) => {
+    if(response.ok) {
+      addSuccessPopup();
+      resetForm();
+    } else {
+      addErrorPopup();
+    }
+  })
+    .catch(() => {
+      addErrorPopup();
+    });
+});
+
+const addErrorLoad = () => {
+  document.body.append(loadErrorPopup);
 };
 
 const closePopup =() => {
-  document.addEventListener('click', () => {
-    formSuccess.remove();
-    formError.remove();
-  });
-  document.addEventListener('keyup', (e) => {
-    if (e.keyCode === 27) {
-      formSuccess.remove();
-      formError.remove();
-    };
-  });
-}
+  formSuccessPopup.remove();
+  formErrorPopup.remove();
+  loadErrorPopup.remove();
+};
 
-export {togglePageActiveState, validateMinPrice, validateRoomsInput, addForm, roomNumberSelect, capacitySelect, onTimeChange, addSuccessPopup, addErrorPopup, setUserFormSubmit, closePopup, filterForm};
+export {togglePageActiveState, validateMinPrice, validateRoomsInput, addForm, resetButton, roomNumberSelect, capacitySelect, onTimeChange, closePopup, filterForm, resetForm, addErrorLoad};
