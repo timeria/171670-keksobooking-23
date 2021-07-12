@@ -1,4 +1,4 @@
-import {addForm, togglePageActiveState, addErrorLoad} from './form.js';
+import {adForm, togglePageActiveState, addErrorLoad} from './form.js';
 import {OFFERS_COUNT, TOKIO_CENTER, pinSetting, fetchUrl} from './data.js';
 import {generateAd} from './offer.js';
 
@@ -30,7 +30,7 @@ const markerMain = L.marker(
 markerMain.addTo(map);
 
 markerMain.on('move', (evt) => {
-  addForm.address.value = `${evt.latlng.lat.toFixed(5)}, ${evt.latlng.lng.toFixed(5)}`;
+  adForm.address.value = `${evt.latlng.lat.toFixed(5)}, ${evt.latlng.lng.toFixed(5)}`;
 });
 
 
@@ -42,7 +42,7 @@ fetch(fetchUrl.GET)
       const marker = L.marker(
         offer.location,
         {
-          regularPinIcon,
+          icon: regularPinIcon,
         },
       );
       marker.addTo(map)
@@ -52,3 +52,5 @@ fetch(fetchUrl.GET)
   .catch(() => {
     addErrorLoad();
   });
+
+export {map, markerMain};
