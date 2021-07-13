@@ -1,17 +1,20 @@
-import {OFFERS_COUNT, generateOffer} from './data.js';
-import {generateAds} from './offer.js';
-import {validateMinPrice, validateRoomsInput, addForm} from './form.js';
+import './map.js';
+import {validateMinPrice, validateRoomsInput, adForm, onTimeChange, resetButton, closePopup, resetForm} from './form.js';
+import {keyCode} from './data.js';
 
-const mapCanvas = document.querySelector('#map-canvas');
+adForm.type.addEventListener('change', validateMinPrice);
 
-const offersList = new Array(OFFERS_COUNT).fill(null).map(generateOffer);
+adForm.rooms.addEventListener('change', validateRoomsInput);
 
-const allOffersFragment = generateAds(offersList); // тут фрагмент с разметкой 10 карточек
+adForm.timein.addEventListener('change', onTimeChange);
+adForm.timeout.addEventListener('change', onTimeChange);
 
-mapCanvas.appendChild(allOffersFragment.firstChild);
+document.addEventListener('click', closePopup);
+document.addEventListener('keyup', (e) => {
+  if (e.keyCode === keyCode) {
+    closePopup();
+  }
+});
 
-addForm.type.addEventListener('change', validateMinPrice);
+resetButton.addEventListener('click', resetForm);
 
-addForm.rooms.addEventListener('change', validateRoomsInput);
-
-//togglePageActiveState(true);
