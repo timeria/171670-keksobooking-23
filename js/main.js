@@ -1,6 +1,7 @@
 import './map.js';
 import {validateMinPrice, validateRoomsInput, adForm, onTimeChange, resetButton, closePopup, resetForm} from './form.js';
 import {keyCode} from './data.js';
+import './filter.js';
 
 adForm.type.addEventListener('change', validateMinPrice);
 
