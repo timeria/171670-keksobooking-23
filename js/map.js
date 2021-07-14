@@ -33,6 +33,7 @@ markerMain.on('move', (evt) => {
   adForm.address.value = `${evt.latlng.lat.toFixed(5)}, ${evt.latlng.lng.toFixed(5)}`;
 });
 
+const markerGroup = L.layerGroup().addTo(map);
 
 fetch(fetchUrl.GET)
   .then((response) => response.json())
@@ -45,7 +46,7 @@ fetch(fetchUrl.GET)
           icon: regularPinIcon,
         },
       );
-      marker.addTo(map)
+      marker.addTo(markerGroup)
         .bindPopup(generateAd(offer));
     });
   })
@@ -53,4 +54,4 @@ fetch(fetchUrl.GET)
     addErrorLoad();
   });
 
-export {map, markerMain};
+export {map, markerMain, markerGroup};
