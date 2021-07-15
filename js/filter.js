@@ -1,10 +1,5 @@
 import {filterForm} from './form.js';
-import {OFFERS_COUNT, fetchUrl, pinSetting} from './data.js';
-import {map, markerGroup} from './map.js';
-import {generateAd} from './offer.js';
 
-const filterTypeHousing = filterForm.querySelector('#housing-type');
-const filterPriceHousing = filterForm.querySelector('#housing-price');
 const VALUE_OF_ALL_ADS = 'any';
 const PRICE_MAP = {
   any: {
@@ -31,35 +26,25 @@ const filterPinsByType = (dataElement) =>
 const filterPinsByPrice = (dataElement) =>
   PRICE_MAP[filterForm['housing-price'].value].min < dataElement.offer.price && PRICE_MAP[filterForm['housing-price'].value].max > dataElement.offer.price;
 
-const compare = (wizardA, wizardB) => {
-  const rankA = filterPinsByType(wizardA);
-  const rankB = filterPinsByType(wizardB);
+const filterPinsByRooms = (dataElement) => Number(filterForm['housing-rooms'].value) === dataElement.offer.rooms || filterForm['housing-rooms'].value === VALUE_OF_ALL_ADS;
 
-  return rankB - rankA;
-}
+const filterPinsByGuests = (dataElement) => Number(filterForm['housing-guests'].value) === dataElement.offer.guests || filterForm['housing-guests'].value === VALUE_OF_ALL_ADS;
 
-const setFilter = (elem) => fetch(fetchUrl.GET)
-  .then((response) => response.json())
-  .then((offers) => {
-    offers.slice().sort(elem).slice(0, OFFERS_COUNT).forEach((offer) => {
-      const regularPinIcon = L.icon(pinSetting.REGULAR);
-      const marker = L.marker(
-        offer.location,
-        {
-          icon: regularPinIcon,
-        },
-      );
-      marker.addTo(map)
-        .bindPopup(generateAd(offer));
-    });
-  })
+const featureFilterFormArr = Array.from(filterForm.features);
 
-
-filterForm.addEventListener('change', () => {
-  markerGroup.clearLayers();
-  setFilter(compare);
+const filterPinsByFeatures = (dataElement) => !featureFilterFormArr.some((val) => {
+  const featuresList = dataElement.offer.features;
+  const notIncludeVal = featuresList && !featuresList.includes(val.value);
+  return  val.checked && notIncludeVal;
 });
 
+const filterMapPins = function (pins) {
+  return pins.
+    filter(filterPinsByType).
+    filter(filterPinsByPrice).
+    filter(filterPinsByRooms).
+    filter(filterPinsByGuests).
+    filter(filterPinsByFeatures);
+};
 
-
-
+export {filterMapPins};
