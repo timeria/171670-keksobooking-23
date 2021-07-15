@@ -32,24 +32,11 @@ const filterPinsByGuests = (dataElement) => Number(filterForm['housing-guests'].
 
 const featureFilterFormArr = Array.from(filterForm.features);
 
-const getSelectedFeatures = () => {
-  const featuresArray = [];
-  featureFilterFormArr.forEach((filter) => {
-    const value = filter.getAttribute('value');
-    if (filter.checked) {
-      featuresArray.push(value);
-    }
-  });
-  return featuresArray;
-};
-
-const filterPinsByFeatures = (pinElement) => {
-  const featuresList = getSelectedFeatures();
-  return Boolean(
-    pinElement.offer.features &&
-    featuresList.every((item) => pinElement.offer.features.includes(item)),
-  );
-};
+const filterPinsByFeatures = (dataElement) => !featureFilterFormArr.some((val) => {
+  const featuresList = dataElement.offer.features;
+  const notIncludeVal = featuresList && !featuresList.includes(val.value);
+  return  val.checked && notIncludeVal;
+});
 
 const filterMapPins = function (pins) {
   return pins.
