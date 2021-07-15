@@ -1,6 +1,8 @@
-import {adForm, togglePageActiveState, addErrorLoad} from './form.js';
+import {debounce} from './debounce.js';
+import {adForm, togglePageActiveState, addErrorLoad, filterForm} from './form.js';
 import {OFFERS_COUNT, TOKIO_CENTER, pinSetting, fetchUrl} from './data.js';
 import {generateAd} from './offer.js';
+import {filterMapPins} from './filter.js';
 
 const mainPinIcon = L.icon(pinSetting.MAIN);
 
@@ -35,19 +37,33 @@ markerMain.on('move', (evt) => {
 
 const markerGroup = L.layerGroup().addTo(map);
 
+const addPoints = (ads) => {
+  ads.forEach((offer) => {
+    const regularPinIcon = L.icon(pinSetting.REGULAR);
+    const marker = L.marker(
+      offer.location,
+      {
+        icon: regularPinIcon,
+      },
+    );
+    marker.addTo(markerGroup)
+      .bindPopup(generateAd(offer));
+  });
+};
+
+
 fetch(fetchUrl.GET)
   .then((response) => response.json())
   .then((offers) => {
-    offers.slice(0, OFFERS_COUNT).forEach((offer) => {
-      const regularPinIcon = L.icon(pinSetting.REGULAR);
-      const marker = L.marker(
-        offer.location,
-        {
-          icon: regularPinIcon,
-        },
-      );
-      marker.addTo(markerGroup)
-        .bindPopup(generateAd(offer));
+    const allOffersArr = offers.slice(0, OFFERS_COUNT);
+    addPoints(allOffersArr);
+    filterForm.addEventListener('change', debounce(() => {
+      markerGroup.clearLayers();
+      addPoints(filterMapPins(allOffersArr));
+    }));
+    filterForm.addEventListener('reset', () => {
+      markerGroup.clearLayers();
+      addPoints(allOffersArr);
     });
   })
   .catch(() => {
