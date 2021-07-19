@@ -48,4 +48,6 @@ const fetchUrl = {
 
 const keyCode = 27;
 
-export {OFFERS_COUNT, TYPES_OF_HOUSING, TOKIO_CENTER, pinSetting, fetchUrl, keyCode};
+const mapZoom = 13;
+
+export {OFFERS_COUNT, TYPES_OF_HOUSING, TOKIO_CENTER, pinSetting, fetchUrl, keyCode, mapZoom};

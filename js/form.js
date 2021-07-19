@@ -1,4 +1,4 @@
-import {TYPES_OF_HOUSING, fetchUrl, TOKIO_CENTER} from './data.js';
+import {TYPES_OF_HOUSING, fetchUrl, TOKIO_CENTER, keyCode} from './data.js';
 import {map, markerMain} from './map.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -14,17 +14,15 @@ const ROOMS_FOR_GUESTS_MAP = {
   3: ['1', '2', '3'],
   100: ['0'],
 };
-const roomNumberSelect = adForm.rooms;
-const capacitySelect = adForm.capacity;
 
 //Подмена минимального значения цены за жилье в завичисимости от типа
-const validateMinPrice = () => {
+const onPriceValidate = () => {
   adForm.price.min = TYPES_OF_HOUSING[adForm.type.value].minPrice;
   adForm.price.placeholder = TYPES_OF_HOUSING[adForm.type.value].minPrice;
 };
 
 //Валидация количества гостей и комнат
-const validateRoomsInput = (evt) => {
+const onRoomsValidate = (evt) => {
   const capacityList = ROOMS_FOR_GUESTS_MAP[evt.target.value];
   const capacityElement = adForm.capacity.children;
   for(let i=0; i<capacityElement.length; i++) {
@@ -62,7 +60,7 @@ const addErrorPopup = () => {
   document.body.append(formErrorPopup);
 };
 
-const resetForm = () => {
+const onFormReset = () => {
   markerMain.setLatLng(TOKIO_CENTER);
   map.setView(TOKIO_CENTER, 13);
   adForm.reset();
@@ -80,7 +78,7 @@ adForm.addEventListener('submit', (evt) => {
   ).then((response) => {
     if(response.ok) {
       addSuccessPopup();
-      resetForm();
+      onFormReset();
     } else {
       addErrorPopup();
     }
@@ -94,10 +92,21 @@ const addErrorLoad = () => {
   document.body.append(loadErrorPopup);
 };
 
-const closePopup =() => {
+const popupClose = () => {
   formSuccessPopup.remove();
   formErrorPopup.remove();
   loadErrorPopup.remove();
 };
 
-export {togglePageActiveState, validateMinPrice, validateRoomsInput, adForm, resetButton, roomNumberSelect, capacitySelect, onTimeChange, closePopup, filterForm, resetForm, addErrorLoad};
+const onPopupClose = () => {
+  popupClose();
+  document.removeEventListener('click', popupClose);
+};
+
+const onPopupKeyup = (e) => {
+  if (e.keyCode === keyCode) {
+    popupClose();
+    document.removeEventListener('click', popupClose);
+  }
+};
+export {togglePageActiveState, onPriceValidate, onRoomsValidate, adForm, resetButton, onTimeChange, onPopupClose, onPopupKeyup, filterForm, onFormReset, addErrorLoad};

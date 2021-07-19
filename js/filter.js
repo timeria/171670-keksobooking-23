@@ -38,13 +38,13 @@ const filterPinsByFeatures = (dataElement) => !featureFilterFormArr.some((val) =
   return  val.checked && notIncludeVal;
 });
 
-const filterMapPins = function (pins) {
-  return pins.
+const filterMapPins = (pins) =>
+  pins.
     filter(filterPinsByType).
     filter(filterPinsByPrice).
     filter(filterPinsByRooms).
     filter(filterPinsByGuests).
     filter(filterPinsByFeatures);
-};
+
 
 export {filterMapPins};

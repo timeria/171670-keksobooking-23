@@ -1,6 +1,6 @@
 import {debounce} from './debounce.js';
 import {adForm, togglePageActiveState, addErrorLoad, filterForm} from './form.js';
-import {OFFERS_COUNT, TOKIO_CENTER, pinSetting, fetchUrl} from './data.js';
+import {OFFERS_COUNT, TOKIO_CENTER, pinSetting, fetchUrl, mapZoom} from './data.js';
 import {generateAd} from './offer.js';
 import {filterMapPins} from './filter.js';
 
@@ -12,7 +12,7 @@ const map = L.map('map-canvas')
   .on('load', () => {
     togglePageActiveState(false);
   })
-  .setView(TOKIO_CENTER, 13);
+  .setView(TOKIO_CENTER, mapZoom);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

@@ -1,21 +1,17 @@
 import './map.js';
-import {validateMinPrice, validateRoomsInput, adForm, onTimeChange, resetButton, closePopup, resetForm} from './form.js';
-import {keyCode} from './data.js';
+import {onPriceValidate, onRoomsValidate, adForm, onTimeChange, resetButton, onPopupClose, onFormReset, onPopupKeyup} from './form.js';
 import './filter.js';
 
-adForm.type.addEventListener('change', validateMinPrice);
+adForm.type.addEventListener('change', onPriceValidate);
 
-adForm.rooms.addEventListener('change', validateRoomsInput);
+adForm.rooms.addEventListener('change', onRoomsValidate);
 
 adForm.timein.addEventListener('change', onTimeChange);
 adForm.timeout.addEventListener('change', onTimeChange);
 
-document.addEventListener('click', closePopup);
-document.addEventListener('keyup', (e) => {
-  if (e.keyCode === keyCode) {
-    closePopup();
-  }
-});
+document.addEventListener('click', onPopupClose);
 
-resetButton.addEventListener('click', resetForm);
+document.addEventListener('keyup', onPopupKeyup);
+
+resetButton.addEventListener('click', onFormReset);
 
